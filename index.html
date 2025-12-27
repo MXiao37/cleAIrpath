@@ -186,6 +186,7 @@
             width: 100%;
         }
 
+        /* FIXED CYBER BUTTONS - NO SHAKING */
         .cyber-button {
             background: transparent;
             color: var(--neon-blue);
@@ -197,9 +198,16 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             text-transform: uppercase;
             box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            text-decoration: none;
+            outline: none;
+            z-index: 10;
         }
 
         .cyber-button::before {
@@ -210,7 +218,8 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
-            transition: left 0.5s;
+            transition: left 0.7s ease;
+            z-index: 1;
         }
 
         .cyber-button:hover::before {
@@ -220,7 +229,18 @@
         .cyber-button:hover {
             background: rgba(0, 243, 255, 0.1);
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
-            transform: translateY(-2px);
+            border-color: var(--neon-blue);
+            transform: scale(1.05);
+        }
+
+        .cyber-button:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
+
+        .cyber-button i {
+            margin-right: 10px;
+            font-size: 1.1em;
         }
 
         /* Futuristic Hero Section */
@@ -361,20 +381,20 @@
             border: 1px solid rgba(0, 243, 255, 0.3);
             box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
             transform-style: preserve-3d;
+            z-index: 5;
         }
 
         .ai-agent-3d:hover {
-            transform: scale(1.2) translateZ(20px);
+            transform: scale(1.2);
             background: rgba(0, 243, 255, 0.2);
             box-shadow: 0 0 40px var(--neon-blue);
+            border-color: var(--neon-blue);
         }
 
         .agent-1 { transform: rotate(0deg) translateX(200px) rotate(0deg); }
-        .agent-2 { transform: rotate(60deg) translateX(200px) rotate(-60deg); }
-        .agent-3 { transform: rotate(120deg) translateX(200px) rotate(-120deg); }
-        .agent-4 { transform: rotate(180deg) translateX(200px) rotate(-180deg); }
-        .agent-5 { transform: rotate(240deg) translateX(200px) rotate(-240deg); }
-        .agent-6 { transform: rotate(300deg) translateX(200px) rotate(-300deg); }
+        .agent-2 { transform: rotate(90deg) translateX(200px) rotate(-90deg); }
+        .agent-3 { transform: rotate(180deg) translateX(200px) rotate(-180deg); }
+        .agent-4 { transform: rotate(270deg) translateX(200px) rotate(-270deg); }
 
         /* 辩论连接光束 */
         .debate-beam {
@@ -769,6 +789,11 @@
                 text-align: center;
             }
             
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
             .cyber-dashboard {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -802,6 +827,16 @@
             
             .footer-content {
                 grid-template-columns: 1fr;
+            }
+            
+            .cyber-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .nav-container .cyber-button {
+                padding: 8px 16px;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -851,20 +886,16 @@
                 </div>
                 
                 <!-- AI智能体 -->
-                <div class="ai-agent-3d agent-1" data-agent="CFO">CFO</div>
-                <div class="ai-agent-3d agent-2" data-agent="EDUCATOR">EDUCATOR</div>
-                <div class="ai-agent-3d agent-3" data-agent="CEO">CEO</div>
-                <div class="ai-agent-3d agent-4" data-agent="PARENT">PARENT</div>
-                <div class="ai-agent-3d agent-5" data-agent="STUDENT">STUDENT</div>
-                <div class="ai-agent-3d agent-6" data-agent="OPERATIONS">OPS</div>
+                <div class="ai-agent-3d agent-1" data-agent="PARENT">PARENT</div>
+                <div class="ai-agent-3d agent-2" data-agent="TEACHERS">TEACHERS</div>
+                <div class="ai-agent-3d agent-3" data-agent="STUDENTS">STUDENTS</div>
+                <div class="ai-agent-3d agent-4" data-agent="PRINCIPAL">PRINCIPAL</div>
                 
                 <!-- 动态连接光束 -->
                 <div class="debate-beam" style="transform: rotate(0deg)"></div>
-                <div class="debate-beam" style="transform: rotate(60deg)"></div>
-                <div class="debate-beam" style="transform: rotate(120deg)"></div>
+                <div class="debate-beam" style="transform: rotate(90deg)"></div>
                 <div class="debate-beam" style="transform: rotate(180deg)"></div>
-                <div class="debate-beam" style="transform: rotate(240deg)"></div>
-                <div class="debate-beam" style="transform: rotate(300deg)"></div>
+                <div class="debate-beam" style="transform: rotate(270deg)"></div>
             </div>
         </div>
     </section>
@@ -874,7 +905,7 @@
         <div class="hero-container">
             <div class="section-header">
                 <h2 class="cyber-title">NEURAL DEBATE ARCHITECTURE</h2>
-                <p class="section-subtitle">Six specialized AI agents engage in structured debates, representing different stakeholder perspectives to eliminate decision blind spots</p>
+                <p class="section-subtitle">Four specialized AI agents engage in structured debates, representing different stakeholder perspectives to eliminate decision blind spots</p>
             </div>
             
             <!-- 全息卡片网格 -->
@@ -960,7 +991,7 @@
                         <span class="terminal-prompt">neuro-debate></span> System initialized. Awaiting decision problem...
                     </div>
                     <div class="terminal-line">
-                        <span class="terminal-prompt">neuro-debate></span> Six AI agents are standing by: CFO, EDUCATOR, CEO, PARENT, STUDENT, OPERATIONS
+                        <span class="terminal-prompt">neuro-debate></span> Four AI agents are standing by: PARENT, TEACHERS, STUDENTS, PRINCIPAL
                     </div>
                     <div class="terminal-line">
                         <span class="terminal-prompt">neuro-debate></span> Neural debate architecture is online and ready for simulation.
@@ -1137,12 +1168,10 @@
                 agent.addEventListener('click', function() {
                     const agentName = this.dataset.agent;
                     const descriptions = {
-                        'CFO': 'FINANCIAL DIRECTOR: Analyzes cost-benefit ratios, ROI calculations, and budget constraints',
-                        'EDUCATOR': 'EDUCATION SPECIALIST: Focuses on pedagogical effectiveness, student outcomes, and curriculum alignment',
-                        'CEO': 'CHIEF EXECUTIVE: Considers strategic vision, competitive positioning, and long-term growth',
                         'PARENT': 'STAKEHOLDER REP: Prioritizes safety, value for money, and developmental impact',
-                        'STUDENT': 'END-USER PERSPECTIVE: Emphasizes engagement, usability, and personal benefit',
-                        'OPERATIONS': 'OPERATIONS DIRECTOR: Evaluates implementation feasibility, resource allocation, and logistical requirements'
+                        'TEACHERS': 'EDUCATION SPECIALIST: Focuses on pedagogical effectiveness, student outcomes, and curriculum alignment',
+                        'STUDENTS': 'END-USER PERSPECTIVE: Emphasizes engagement, usability, and personal benefit',
+                        'PRINCIPAL': 'SCHOOL LEADER: Considers strategic vision, competitive positioning, and long-term growth'
                     };
                     
                     // 显示全息提示
@@ -1243,14 +1272,12 @@
                 `;
                 
                 // 模拟辩论过程
-                const agents = ['CFO', 'EDUCATOR', 'CEO', 'PARENT', 'STUDENT', 'OPERATIONS'];
+                const agents = ['PARENT', 'TEACHERS', 'STUDENTS', 'PRINCIPAL'];
                 const arguments = [
-                    "Analyzing financial implications and ROI projections...",
-                    "Evaluating educational impact and curriculum alignment...",
-                    "Assessing strategic positioning and market opportunities...",
                     "Considering safety concerns and value proposition...",
+                    "Evaluating educational impact and curriculum alignment...",
                     "Examining engagement factors and user experience...",
-                    "Reviewing implementation requirements and resource allocation..."
+                    "Assessing strategic positioning and school vision..."
                 ];
                 
                 let delay = 1000;
@@ -1400,5 +1427,4 @@
         });
     </script>
 </body>
-
 </html>
