@@ -309,7 +309,7 @@
             background: linear-gradient(to bottom, var(--neon-blue), var(--neon-purple));
         }
 
-        /* Improved 3D AI辩论可视化系统 */
+        /* FIXED AI AGENT POSITIONING - Improved Separation */
         .ai-debate-scene {
             position: relative;
             width: 100%;
@@ -325,11 +325,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: min(400px, 80%);
-            height: min(400px, 80%);
+            width: min(450px, 80vw);
+            height: min(450px, 80vw);
             border: 1px solid rgba(0, 243, 255, 0.2);
             border-radius: 50%;
-            animation: rotateOrbit 60s linear infinite;
+            animation: rotateOrbit 120s linear infinite;
         }
 
         @keyframes rotateOrbit {
@@ -352,6 +352,7 @@
             align-items: center;
             justify-content: center;
             color: white;
+            z-index: 10;
         }
 
         @keyframes pulseCore {
@@ -365,39 +366,96 @@
             }
         }
 
+        /* SEPARATED AI AGENTS - Fixed Positioning */
+        .ai-agent-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(450px, 80vw);
+            height: min(450px, 80vw);
+        }
+
         .ai-agent-3d {
             position: absolute;
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(0, 243, 255, 0.3);
             box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
             z-index: 5;
             font-size: 0.8rem;
             text-align: center;
-            padding: 5px;
+            padding: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .ai-agent-3d:hover {
             background: rgba(0, 243, 255, 0.2);
             box-shadow: 0 0 40px var(--neon-blue);
             border-color: var(--neon-blue);
-            transform: scale(1.1);
+            transform: scale(1.15) !important;
         }
 
-        .agent-1 { transform: rotate(0deg) translateX(min(180px, 40%)) rotate(0deg); }
-        .agent-2 { transform: rotate(90deg) translateX(min(180px, 40%)) rotate(-90deg); }
-        .agent-3 { transform: rotate(180deg) translateX(min(180px, 40%)) rotate(-180deg); }
-        .agent-4 { transform: rotate(270deg) translateX(min(180px, 40%)) rotate(-270deg); }
+        /* Positioning the 4 agents at 45°, 135°, 225°, and 315° */
+        .ai-agent-3d[data-agent="PARENT"] {
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ai-agent-3d[data-agent="TEACHERS"] {
+            top: 50%;
+            right: 10%;
+            transform: translateY(-50%);
+        }
+
+        .ai-agent-3d[data-agent="STUDENTS"] {
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ai-agent-3d[data-agent="PRINCIPAL"] {
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+        }
+
+        /* Add decorative beams between agents */
+        .debate-beam {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 50%;
+            background: linear-gradient(to top, transparent, var(--neon-blue));
+            transform-origin: top center;
+            opacity: 0.3;
+            animation: beamPulse 3s infinite;
+            z-index: 1;
+        }
+
+        @keyframes beamPulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.5; }
+        }
+
+        .beam-1 { transform: translate(-50%, -50%) rotate(0deg); }
+        .beam-2 { transform: translate(-50%, -50%) rotate(90deg); }
+        .beam-3 { transform: translate(-50%, -50%) rotate(180deg); }
+        .beam-4 { transform: translate(-50%, -50%) rotate(270deg); }
 
         /* Section Improvements */
         .cyber-section {
@@ -830,9 +888,19 @@
             }
             
             .ai-agent-3d {
-                width: 50px;
-                height: 50px;
+                width: 70px;
+                height: 70px;
                 font-size: 0.7rem;
+            }
+            
+            .ai-agent-container {
+                width: min(350px, 80vw);
+                height: min(350px, 80vw);
+            }
+            
+            .ai-orbit {
+                width: min(350px, 80vw);
+                height: min(350px, 80vw);
             }
         }
 
@@ -846,7 +914,23 @@
             }
             
             .ai-debate-scene {
-                height: 300px;
+                height: 350px;
+            }
+            
+            .ai-agent-3d {
+                width: 60px;
+                height: 60px;
+                font-size: 0.65rem;
+            }
+            
+            .ai-agent-container {
+                width: min(300px, 80vw);
+                height: min(300px, 80vw);
+            }
+            
+            .ai-orbit {
+                width: min(300px, 80vw);
+                height: min(300px, 80vw);
             }
         }
     </style>
@@ -902,11 +986,20 @@
                     <i class="fas fa-cogs"></i>
                 </div>
                 
-                <!-- AI智能体 -->
-                <div class="ai-agent-3d agent-1" data-agent="PARENT">PARENT</div>
-                <div class="ai-agent-3d agent-2" data-agent="TEACHERS">TEACHERS</div>
-                <div class="ai-agent-3d agent-3" data-agent="STUDENTS">STUDENTS</div>
-                <div class="ai-agent-3d agent-4" data-agent="PRINCIPAL">PRINCIPAL</div>
+                <!-- Debate beams -->
+                <div class="debate-beam beam-1"></div>
+                <div class="debate-beam beam-2"></div>
+                <div class="debate-beam beam-3"></div>
+                <div class="debate-beam beam-4"></div>
+                
+                <!-- AI智能体容器 -->
+                <div class="ai-agent-container">
+                    <!-- AI智能体 - 现在正确分离 -->
+                    <div class="ai-agent-3d" data-agent="PARENT">PARENT</div>
+                    <div class="ai-agent-3d" data-agent="TEACHERS">TEACHERS</div>
+                    <div class="ai-agent-3d" data-agent="STUDENTS">STUDENTS</div>
+                    <div class="ai-agent-3d" data-agent="PRINCIPAL">PRINCIPAL</div>
+                </div>
             </div>
         </div>
     </section>
@@ -1159,7 +1252,21 @@
         // 初始化3D AI辩论系统
         function initAIDebateSystem() {
             const agents = document.querySelectorAll('.ai-agent-3d');
+            const beams = document.querySelectorAll('.debate-beam');
             const core = document.querySelector('.ai-core');
+            
+            // 随机激活辩论光束
+            setInterval(() => {
+                beams.forEach(beam => {
+                    if (Math.random() > 0.7) {
+                        const originalOpacity = beam.style.opacity;
+                        beam.style.opacity = '0.8';
+                        setTimeout(() => {
+                            beam.style.opacity = originalOpacity || '0.3';
+                        }, 300);
+                    }
+                });
+            }, 1500);
             
             // AI智能体交互
             agents.forEach(agent => {
@@ -1177,11 +1284,21 @@
                     
                     // 视觉反馈
                     this.style.boxShadow = '0 0 40px var(--neon-purple)';
+                    this.style.borderColor = 'var(--neon-purple)';
                     setTimeout(() => {
-                        this.style.boxShadow = '0 0 20px rgba(0, 243, 255, 0.2)';
+                        this.style.boxShadow = '';
+                        this.style.borderColor = '';
                     }, 1000);
                 });
             });
+            
+            // 核心脉冲效果
+            setInterval(() => {
+                core.style.transform = 'translate(-50%, -50%) scale(1.15)';
+                setTimeout(() => {
+                    core.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 300);
+            }, 3000);
         }
         
         // 显示全息消息
@@ -1337,8 +1454,10 @@
                         const agentElement = document.querySelector(`.ai-agent-3d[data-agent="${agent}"]`);
                         if (agentElement) {
                             agentElement.style.boxShadow = '0 0 40px var(--neon-blue)';
+                            agentElement.style.borderColor = 'var(--neon-blue)';
                             setTimeout(() => {
                                 agentElement.style.boxShadow = '';
+                                agentElement.style.borderColor = '';
                             }, 500);
                         }
                     }, delay);
@@ -1465,8 +1584,10 @@
                 // 视觉反馈
                 document.querySelectorAll('.ai-agent-3d').forEach(agent => {
                     agent.style.boxShadow = '0 0 40px var(--matrix-green)';
+                    agent.style.borderColor = 'var(--matrix-green)';
                     setTimeout(() => {
                         agent.style.boxShadow = '';
+                        agent.style.borderColor = '';
                     }, 1000);
                 });
             });
