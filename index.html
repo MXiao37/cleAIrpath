@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEUROSCOPE | AI辩论决策系统 - Conrad竞赛</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #b967ff;
+            --matrix-green: #00ff41;
+            --cyber-orange: #ff6b35;
+            --deep-space: #0a0e17;
+            --hologram-blue: rgba(0, 179, 255, 0.1);
+            --text-glow: 0 0 10px, 0 0 20px, 0 0 30px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--deep-space);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(185, 103, 255, 0.05) 0%, transparent 50%),
+                var(--deep-space);
+        }
+
+        /* Cyberpunk Matrix Background */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.1;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 65, 0.1) 2px,
+                rgba(0, 255, 65, 0.1) 4px
+            );
+            animation: matrixFlow 20s linear infinite;
+        }
+
+        @keyframes matrixFlow {
+            from { transform: translateY(0); }
+            to { transform: translateY(100vh); }
+        }
+
+        /* Hologram Grid */
+        .hologram-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(0, 179, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 179, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Cyberpunk Navigation */
+        .cyber-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 14, 23, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .logo-icon {
+            color: var(--neon-blue);
+            text-shadow: var(--text-glow) var(--neon-blue);
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue); }
+            50% { text-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue), 0 0 60px var(--neon-blue); }
+        }
+
+        .logo-text {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .cyber-nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .cyber-nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 5px 0;
+            transition: all 0.3s;
+        }
+
+        .cyber-nav-links a::before {
+            content: '>';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            color: var(--matrix-green);
+            transition: all 0.3s;
+        }
+
+        .cyber-nav-links a:hover::before {
+            opacity: 1;
+            left: -15px;
+        }
+
+        .cyber-nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            transition: width 0.3s;
+        }
+
+        .cyber-nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .cyber-nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cyber-button {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 12px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+            letter-spacing: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+
+        .cyber-button:hover {
+            background: rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Futuristic Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 100px;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .hero-title span {
+            display: block;
+        }
+
+        .title-line-1 {
+            background: linear-gradient(45deg, var(--neon-blue), #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .title-line-2 {
+            background: linear-gradient(45deg, var(--neon-purple), var(--cyber-orange));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin-bottom: 50px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .hero-subtitle::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--neon-blue), var(--neon-purple));
+        }
+
+        /* 3D AI辩论可视化系统 */
+        .ai-debate-scene {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 600px;
+            height: 600px;
+            perspective: 1000px;
+        }
+
+        .ai-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 50%;
+            animation: rotateOrbit 40s linear infinite;
+        }
+
+        @keyframes rotateOrbit {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .ai-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, var(--neon-blue), transparent 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 60px var(--neon-blue);
+            animation: pulseCore 3s infinite;
+        }
+
+        @keyframes pulseCore {
+            0%, 100% { 
+                box-shadow: 0 0 60px var(--neon-blue), 0 0 90px rgba(0, 243, 255, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 90px var(--neon-blue), 0 0 120px rgba(0, 243, 255, 0.7);
+            }
+        }
+
+        .ai-agent-3d {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            transform-style: preserve-3d;
+        }
+
+        .ai-agent-3d:hover {
+            transform: scale(1.2) translateZ(20px);
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 40px var(--neon-blue);
+        }
+
+        .agent-1 { transform: rotate(0deg) translateX(200px) rotate(0deg); }
+        .agent-2 { transform: rotate(60deg) translateX(200px) rotate(-60deg); }
+        .agent-3 { transform: rotate(120deg) translateX(200px) rotate(-120deg); }
+        .agent-4 { transform: rotate(180deg) translateX(200px) rotate(-180deg); }
+        .agent-5 { transform: rotate(240deg) translateX(200px) rotate(-240deg); }
+        .agent-6 { transform: rotate(300deg) translateX(200px) rotate(-300deg); }
+
+        /* 辩论连接光束 */
+        .debate-beam {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 200px;
+            background: linear-gradient(to top, transparent, var(--neon-blue));
+            transform-origin: bottom center;
+            opacity: 0.6;
+            animation: beamPulse 2s infinite;
+        }
+
+        @keyframes beamPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        /* 未来主义内容区块 */
+        .cyber-section {
+            padding: 150px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .cyber-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .cyber-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* 全息卡片 */
+        .holo-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 10px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .holo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .holo-card:hover::before {
+            left: 100%;
+        }
+
+        .holo-card:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            color: var(--neon-blue);
+            margin-bottom: 25px;
+            text-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .card-content {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        /* 神经网络流程可视化 */
+        .neural-process {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 100px 0;
+            position: relative;
+        }
+
+        .process-node {
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 243, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            transition: all 0.3s;
+        }
+
+        .process-node:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 30px var(--neon-blue);
+            transform: scale(1.1);
+        }
+
+        .process-connection {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            top: 50%;
+            left: 110px;
+            right: 110px;
+            z-index: 1;
+            animation: flowLight 3s infinite linear;
+        }
+
+        @keyframes flowLight {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* 交互式辩论模拟器 */
+        .debate-simulator {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 15px;
+            padding: 50px;
+            margin-top: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .simulator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .simulator-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--neon-blue), var(--matrix-green));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .cyber-input {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            padding: 15px 20px;
+            color: white;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .cyber-input:focus {
+            outline: none;
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        /* 动态数据仪表板 */
+        .cyber-dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .dashboard-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .dashboard-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 终端风格输出 */
+        .terminal-output {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--matrix-green);
+            border-radius: 10px;
+            padding: 30px;
+            font-family: 'Courier New', monospace;
+            color: var(--matrix-green);
+            min-height: 300px;
+            overflow-y: auto;
+            margin-top: 30px;
+        }
+
+        .terminal-line {
+            margin-bottom: 10px;
+            animation: typewriter 0.5s steps(40, end);
+        }
+
+        .terminal-prompt {
+            color: var(--neon-blue);
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Cyberpunk Footer */
+        .cyber-footer {
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 1px solid var(--neon-blue);
+            padding: 80px 0 30px;
+            margin-top: 150px;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: var(--neon-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .footer-links a::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--matrix-green);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-blue);
+            padding-left: 20px;
+        }
+
+        .footer-links a:hover::before {
+            opacity: 1;
+        }
+
+        .contact-info {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-icon {
+            color: var(--neon-blue);
+            font-size: 1.2rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(0, 243, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .ai-debate-scene {
+                width: 500px;
+                height: 500px;
+            }
+            
+            .ai-orbit {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .agent-1 { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+            .agent-2 { transform: rotate(60deg) translateX(150px) rotate(-60deg); }
+            .agent-3 { transform: rotate(120deg) translateX(150px) rotate(-120deg); }
+            .agent-4 { transform: rotate(180deg) translateX(150px) rotate(-180deg); }
+            .agent-5 { transform: rotate(240deg) translateX(150px) rotate(-240deg); }
+            .agent-6 { transform: rotate(300deg) translateX(150px) rotate(-300deg); }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+            
+            .ai-debate-scene {
+                position: relative;
+                margin: 50px auto;
+                top: 0;
+                transform: none;
+                right: auto;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .cyber-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .cyber-nav-links {
+                display: none;
+            }
+            
+            .neural-process {
+                flex-direction: column;
+                gap: 50px;
+            }
+            
+            .process-connection {
+                display: none;
+            }
+            
+            .cyber-dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 赛博朋克背景 -->
+    <div class="matrix-bg"></div>
+    <div class="hologram-grid"></div>
+
+    <!-- 未来主义导航 -->
+    <nav class="cyber-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <span class="logo-text">NEUROSCOPE</span>
+            </div>
+            <ul class="cyber-nav-links">
+                <li><a href="#hero">HOME</a></li>
+                <li><a href="#about">SYSTEM</a></li>
+                <li><a href="#debate">DEBATE SIM</a></li>
+                <li><a href="#dashboard">ANALYTICS</a></li>
+                <li><a href="#contact">CONTACT</a></li>
+            </ul>
+            <button class="cyber-button" id="activateSystem">ACTIVATE AI</button>
+        </div>
+    </nav>
+
+    <!-- 沉浸式英雄区域 -->
+    <section class="hero-section" id="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line-1">NEURO-DEBATE</span>
+                    <span class="title-line-2">AI DECISION MATRIX</span>
+                </h1>
+                <p class="hero-subtitle">
+                    A revolutionary AI system that simulates multi-perspective debates between intelligent agents to generate optimal strategic decisions for international schools and enterprises.
+                </p>
+                <button class="cyber-button" id="exploreSystem">EXPLORE SYSTEM</button>
+            </div>
+            
+            <!-- 3D AI辩论系统可视化 -->
+            <div class="ai-debate-scene">
+                <div class="ai-orbit"></div>
+                <div class="ai-core">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                
+                <!-- AI智能体 -->
+                <div class="ai-agent-3d agent-1" data-agent="CFO">CFO</div>
+                <div class="ai-agent-3d agent-2" data-agent="EDUCATOR">EDUCATOR</div>
+                <div class="ai-agent-3d agent-3" data-agent="CEO">CEO</div>
+                <div class="ai-agent-3d agent-4" data-agent="PARENT">PARENT</div>
+                <div class="ai-agent-3d agent-5" data-agent="STUDENT">STUDENT</div>
+                <div class="ai-agent-3d agent-6" data-agent="OPERATIONS">OPS</div>
+                
+                <!-- 动态连接光束 -->
+                <div class="debate-beam" style="transform: rotate(0deg)"></div>
+                <div class="debate-beam" style="transform: rotate(60deg)"></div>
+                <div class="debate-beam" style="transform: rotate(120deg)"></div>
+                <div class="debate-beam" style="transform: rotate(180deg)"></div>
+                <div class="debate-beam" style="transform: rotate(240deg)"></div>
+                <div class="debate-beam" style="transform: rotate(300deg)"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 系统介绍 -->
+    <section class="cyber-section" id="about">
+        <div class="hero-container">
+            <div class="section-header">
+                <h2 class="cyber-title">NEURAL DEBATE ARCHITECTURE</h2>
+                <p class="section-subtitle">Six specialized AI agents engage in structured debates, representing different stakeholder perspectives to eliminate decision blind spots</p>
+            </div>
+            
+            <!-- 全息卡片网格 -->
+            <div class="card-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-bottom: 100px;">
+                <div class="holo-card">
+                    <div class="card-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3 class="card-title">NEURAL NETWORK</h3>
+                    <p class="card-content">Interconnected AI agents form a dynamic neural network that processes complex decision problems through simulated synaptic connections.</p>
+                </div>
+                
+                <div class="holo-card">
+                    <div class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="card-title">STRUCTURED DEBATE</h3>
+                    <p class="card-content">Each debate follows parliamentary procedure: opening statements, rebuttals, cross-examination, and closing arguments for maximum analytical depth.</p>
+                </div>
+                
+                <div class="holo-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3 class="card-title">CONSENSUS ENGINE</h3>
+                    <p class="card-content">Our proprietary consensus algorithm synthesizes conflicting perspectives into actionable strategic recommendations with confidence scoring.</p>
+                </div>
+            </div>
+            
+            <!-- 神经网络流程 -->
+            <div class="neural-process">
+                <div class="process-node">
+                    <span>01</span>
+                    <div class="node-tooltip">PROBLEM INPUT</div>
+                </div>
+                <div class="process-connection"></div>
+                <div class="process-node">
+                    <span>02</span>
+                    <div class="node-tooltip">AGENT ACTIVATION</div>
+                </div>
+                <div class="process-connection"></div>
+                <div class="process-node">
+                    <span>03</span>
+                    <div class="node-tooltip">DEBATE SIMULATION</div>
+                </div>
+                <div class="process-connection"></div>
+                <div class="process-node">
+                    <span>04</span>
+                    <div class="node-tooltip">CONSENSUS OUTPUT</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 交互式辩论模拟器 -->
+    <section class="cyber-section" id="debate">
+        <div class="hero-container">
+            <div class="section-header">
+                <h2 class="cyber-title">INTERACTIVE DEBATE SIMULATOR</h2>
+                <p class="section-subtitle">Experience our AI debate system in real-time. Input a decision problem and watch six AI agents debate it from different perspectives</p>
+            </div>
+            
+            <div class="debate-simulator">
+                <div class="simulator-header">
+                    <h3 class="simulator-title">NEURO-DEBATE INTERFACE</h3>
+                    <div class="system-status">
+                        <span class="status-indicator" style="color: var(--matrix-green);">
+                            <i class="fas fa-circle"></i> SYSTEM ONLINE
+                        </span>
+                    </div>
+                </div>
+                
+                <input type="text" class="cyber-input" id="decisionQuery" 
+                       placeholder="ENTER DECISION PROBLEM (e.g., Should our school implement AI-assisted learning system?)">
+                
+                <button class="cyber-button" id="startSimulation" style="width: 100%; padding: 20px; font-size: 1.2rem;">
+                    <i class="fas fa-play"></i> INITIATE DEBATE SIMULATION
+                </button>
+                
+                <!-- 终端输出 -->
+                <div class="terminal-output" id="debateTerminal">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">neuro-debate></span> System initialized. Awaiting decision problem...
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">neuro-debate></span> Six AI agents are standing by: CFO, EDUCATOR, CEO, PARENT, STUDENT, OPERATIONS
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">neuro-debate></span> Neural debate architecture is online and ready for simulation.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 动态数据仪表板 -->
+    <section class="cyber-section" id="dashboard">
+        <div class="hero-container">
+            <div class="section-header">
+                <h2 class="cyber-title">PERFORMANCE ANALYTICS</h2>
+                <p class="section-subtitle">Real-time metrics demonstrating the effectiveness of our neural debate system</p>
+            </div>
+            
+            <div class="cyber-dashboard">
+                <div class="dashboard-item">
+                    <div class="dashboard-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="dashboard-value" id="decisionsProcessed">1,247</div>
+                    <div class="dashboard-label">DECISIONS PROCESSED</div>
+                </div>
+                
+                <div class="dashboard-item">
+                    <div class="dashboard-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="dashboard-value" id="timeSaved">78%</div>
+                    <div class="dashboard-label">TIME SAVED</div>
+                </div>
+                
+                <div class="dashboard-item">
+                    <div class="dashboard-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="dashboard-value" id="accuracyRate">94%</div>
+                    <div class="dashboard-label">DECISION ACCURACY</div>
+                </div>
+                
+                <div class="dashboard-item">
+                    <div class="dashboard-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="dashboard-value" id="debatesCompleted">7,482</div>
+                    <div class="dashboard-label">AI DEBATES</div>
+                </div>
+            </div>
+            
+            <!-- 应用场景展示 -->
+            <div style="margin-top: 100px;">
+                <div class="section-header">
+                    <h2 class="cyber-title">APPLICATION DOMAINS</h2>
+                </div>
+                
+                <div class="card-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 50px;">
+                    <div class="holo-card">
+                        <h3 class="card-title">INTERNATIONAL EDUCATION</h3>
+                        <p class="card-content">
+                            <span style="color: var(--neon-blue);">»</span> Curriculum innovation decisions<br>
+                            <span style="color: var(--neon-blue);">»</span> Resource allocation strategies<br>
+                            <span style="color: var(--neon-blue);">»</span> Technology integration planning<br>
+                            <span style="color: var(--neon-blue);">»</span> Multicultural policy development
+                        </p>
+                        <button class="cyber-button" style="margin-top: 20px; padding: 10px 20px;">VIEW CASE STUDY</button>
+                    </div>
+                    
+                    <div class="holo-card">
+                        <h3 class="card-title">ENTERPRISE STRATEGY</h3>
+                        <p class="card-content">
+                            <span style="color: var(--matrix-green);">»</span> Market expansion analysis<br>
+                            <span style="color: var(--matrix-green);">»</span> Product development decisions<br>
+                            <span style="color: var(--matrix-green);">»</span> Operational efficiency optimization<br>
+                            <span style="color: var(--matrix-green);">»</span> Risk assessment and mitigation
+                        </p>
+                        <button class="cyber-button" style="margin-top: 20px; padding: 10px 20px;">VIEW CASE STUDY</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 赛博朋克页脚 -->
+    <footer class="cyber-footer" id="contact">
+        <div class="hero-container">
+            <div class="footer-content">
+                <div>
+                    <h3 class="footer-title">NEUROSCOPE AI</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 20px;">
+                        A revolutionary AI debate decision system developed for the Conrad Challenge.
+                    </p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt contact-icon"></i>
+                            <span>Guangdong Province, Shenzhen City</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone contact-icon"></i>
+                            <span>+86 12345678910</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope contact-icon"></i>
+                            <span>neuro@scope-ai.com</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">SYSTEM FEATURES</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Neural Debate Architecture</a></li>
+                        <li><a href="#">Multi-Agent Simulation</a></li>
+                        <li><a href="#">Consensus Algorithm</a></li>
+                        <li><a href="#">Real-time Analytics</a></li>
+                        <li><a href="#">Custom Agent Training</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">APPLICATIONS</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Education Management</a></li>
+                        <li><a href="#">Business Strategy</a></li>
+                        <li><a href="#">Policy Development</a></li>
+                        <li><a href="#">Risk Assessment</a></li>
+                        <li><a href="#">Innovation Planning</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-title">CONRAD CHALLENGE</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Project Documentation</a></li>
+                        <li><a href="#">Technical Specifications</a></li>
+                        <li><a href="#">Research Methodology</a></li>
+                        <li><a href="#">Competition Timeline</a></li>
+                        <li><a href="#">Team Information</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2023 NEUROSCOPE AI DEBATE SYSTEM | CONRAD INNOVATION CHALLENGE | ALL SYSTEMS OPERATIONAL</p>
+                <p style="margin-top: 10px; font-size: 0.8rem; color: rgba(255, 255, 255, 0.4);">
+                    This interface simulates a futuristic AI decision system. All data is for demonstration purposes.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化3D AI辩论系统
+        function initAIDebateSystem() {
+            const agents = document.querySelectorAll('.ai-agent-3d');
+            const beams = document.querySelectorAll('.debate-beam');
+            const core = document.querySelector('.ai-core');
+            
+            // 随机激活辩论光束
+            setInterval(() => {
+                beams.forEach(beam => {
+                    if (Math.random() > 0.7) {
+                        beam.style.animation = 'beamPulse 0.5s';
+                        setTimeout(() => {
+                            beam.style.animation = 'beamPulse 2s infinite';
+                        }, 500);
+                    }
+                });
+            }, 1000);
+            
+            // AI智能体交互
+            agents.forEach(agent => {
+                agent.addEventListener('click', function() {
+                    const agentName = this.dataset.agent;
+                    const descriptions = {
+                        'CFO': 'FINANCIAL DIRECTOR: Analyzes cost-benefit ratios, ROI calculations, and budget constraints',
+                        'EDUCATOR': 'EDUCATION SPECIALIST: Focuses on pedagogical effectiveness, student outcomes, and curriculum alignment',
+                        'CEO': 'CHIEF EXECUTIVE: Considers strategic vision, competitive positioning, and long-term growth',
+                        'PARENT': 'STAKEHOLDER REP: Prioritizes safety, value for money, and developmental impact',
+                        'STUDENT': 'END-USER PERSPECTIVE: Emphasizes engagement, usability, and personal benefit',
+                        'OPERATIONS': 'OPERATIONS DIRECTOR: Evaluates implementation feasibility, resource allocation, and logistical requirements'
+                    };
+                    
+                    // 显示全息提示
+                    showHologramMessage(`AGENT ACTIVATED: ${agentName}<br><br>${descriptions[agentName]}`);
+                    
+                    // 视觉反馈
+                    this.style.boxShadow = '0 0 60px var(--neon-purple)';
+                    setTimeout(() => {
+                        this.style.boxShadow = '0 0 20px rgba(0, 243, 255, 0.2)';
+                    }, 1000);
+                });
+            });
+            
+            // 核心脉冲效果
+            setInterval(() => {
+                core.style.transform = 'translate(-50%, -50%) scale(1.1)';
+                setTimeout(() => {
+                    core.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 300);
+            }, 3000);
+        }
+        
+        // 显示全息消息
+        function showHologramMessage(message) {
+            const hologram = document.createElement('div');
+            hologram.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: rgba(0, 0, 0, 0.9);
+                    border: 2px solid var(--neon-blue);
+                    border-radius: 10px;
+                    padding: 30px;
+                    z-index: 9999;
+                    max-width: 500px;
+                    text-align: center;
+                    box-shadow: 0 0 50px rgba(0, 243, 255, 0.5);
+                    backdrop-filter: blur(10px);
+                    animation: hologramAppear 0.5s;
+                ">
+                    <h3 style="color: var(--neon-blue); margin-bottom: 20px; font-family: 'Orbitron', sans-serif;">
+                        <i class="fas fa-brain"></i> AI AGENT INTERFACE
+                    </h3>
+                    <div style="color: #fff; line-height: 1.6;">${message}</div>
+                    <button onclick="this.parentElement.remove()" style="
+                        margin-top: 30px;
+                        background: transparent;
+                        border: 1px solid var(--matrix-green);
+                        color: var(--matrix-green);
+                        padding: 10px 30px;
+                        cursor: pointer;
+                        font-family: 'Orbitron', sans-serif;
+                        letter-spacing: 1px;
+                    ">ACKNOWLEDGE</button>
+                </div>
+            `;
+            
+            document.body.appendChild(hologram);
+            
+            // 添加CSS动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes hologramAppear {
+                    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // 辩论模拟器功能
+        function initDebateSimulator() {
+            const startBtn = document.getElementById('startSimulation');
+            const input = document.getElementById('decisionQuery');
+            const terminal = document.getElementById('debateTerminal');
+            
+            startBtn.addEventListener('click', function() {
+                const question = input.value.trim();
+                if (!question) {
+                    showHologramMessage('ERROR: NO DECISION PROBLEM DETECTED<br><br>Please enter a decision problem to initiate the debate simulation.');
+                    return;
+                }
+                
+                // 显示加载状态
+                startBtn.innerHTML = '<i class="fas fa-cog fa-spin"></i> SIMULATION IN PROGRESS';
+                startBtn.disabled = true;
+                
+                // 清空终端
+                terminal.innerHTML = `
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">neuro-debate></span> Initializing debate simulation...
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">neuro-debate></span> Processing: "${question}"
+                    </div>
+                `;
+                
+                // 模拟辩论过程
+                const agents = ['CFO', 'EDUCATOR', 'CEO', 'PARENT', 'STUDENT', 'OPERATIONS'];
+                const arguments = [
+                    "Analyzing financial implications and ROI projections...",
+                    "Evaluating educational impact and curriculum alignment...",
+                    "Assessing strategic positioning and market opportunities...",
+                    "Considering safety concerns and value proposition...",
+                    "Examining engagement factors and user experience...",
+                    "Reviewing implementation requirements and resource allocation..."
+                ];
+                
+                let delay = 1000;
+                agents.forEach((agent, index) => {
+                    setTimeout(() => {
+                        const line = document.createElement('div');
+                        line.className = 'terminal-line';
+                        line.innerHTML = `
+                            <span class="terminal-prompt">${agent.toLowerCase()}></span> ${arguments[index]}
+                        `;
+                        terminal.appendChild(line);
+                        terminal.scrollTop = terminal.scrollHeight;
+                        
+                        // 视觉反馈
+                        const agentElement = document.querySelector(`.ai-agent-3d[data-agent="${agent}"]`);
+                        if (agentElement) {
+                            agentElement.style.boxShadow = '0 0 40px var(--neon-blue)';
+                            setTimeout(() => {
+                                agentElement.style.boxShadow = '0 0 20px rgba(0, 243, 255, 0.2)';
+                            }, 500);
+                        }
+                    }, delay);
+                    delay += 800;
+                });
+                
+                // 显示结果
+                setTimeout(() => {
+                    const resultLine = document.createElement('div');
+                    resultLine.className = 'terminal-line';
+                    resultLine.innerHTML = `
+                        <span class="terminal-prompt" style="color: var(--matrix-green);">consensus></span> 
+                        Debate complete. Consensus reached with 87% confidence.
+                        <br><br>
+                        <span style="color: var(--neon-blue);">RECOMMENDATION:</span> 
+                        ${generateRecommendation(question)}
+                    `;
+                    terminal.appendChild(resultLine);
+                    terminal.scrollTop = terminal.scrollHeight;
+                    
+                    // 恢复按钮状态
+                    startBtn.innerHTML = '<i class="fas fa-play"></i> INITIATE DEBATE SIMULATION';
+                    startBtn.disabled = false;
+                    
+                    // 显示全息结果
+                    showHologramMessage(`
+                        DEBATE SIMULATION COMPLETE<br><br>
+                        <span style="color: var(--matrix-green);">CONSENSUS: 87%</span><br>
+                        <span style="color: var(--neon-blue);">PROCESSING TIME: 4.8s</span><br><br>
+                        Six AI agents successfully debated the problem and reached a consensus recommendation.
+                    `);
+                }, delay + 1000);
+            });
+        }
+        
+        // 生成推荐
+        function generateRecommendation(question) {
+            if (question.toLowerCase().includes('school') || question.toLowerCase().includes('education')) {
+                return "Implement phased integration with professional development for educators and pilot testing with select student groups.";
+            } else if (question.toLowerCase().includes('business') || question.toLowerCase().includes('market')) {
+                return "Proceed with market analysis phase, followed by controlled pilot launch before full-scale implementation.";
+            } else {
+                return "Recommend proceeding with further research and stakeholder consultation before final decision.";
+            }
+        }
+        
+        // 动态数据仪表板动画
+        function initDashboard() {
+            const counters = {
+                'decisionsProcessed': 1247,
+                'timeSaved': 78,
+                'accuracyRate': 94,
+                'debatesCompleted': 7482
+            };
+            
+            Object.keys(counters).forEach(id => {
+                const element = document.getElementById(id);
+                if (!element) return;
+                
+                const target = counters[id];
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    
+                    if (id === 'timeSaved' || id === 'accuracyRate') {
+                        element.textContent = Math.floor(current) + '%';
+                    } else {
+                        element.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            });
+        }
+        
+        // 导航交互
+        function initNavigation() {
+            const navLinks = document.querySelectorAll('.cyber-nav-links a');
+            const activateBtn = document.getElementById('activateSystem');
+            const exploreBtn = document.getElementById('exploreSystem');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            activateBtn.addEventListener('click', function() {
+                showHologramMessage('NEURAL DEBATE SYSTEM ACTIVATED<br><br>All six AI agents are now online and ready for simulation.<br>System diagnostics: 100% operational.');
+                
+                // 视觉反馈
+                document.querySelectorAll('.ai-agent-3d').forEach(agent => {
+                    agent.style.boxShadow = '0 0 40px var(--matrix-green)';
+                    setTimeout(() => {
+                        agent.style.boxShadow = '0 0 20px rgba(0, 243, 255, 0.2)';
+                    }, 1000);
+                });
+            });
+            
+            exploreBtn.addEventListener('click', function() {
+                document.getElementById('about').scrollIntoView({behavior: 'smooth'});
+            });
+        }
+        
+        // 页面加载初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initAIDebateSystem();
+            initDebateSimulator();
+            initDashboard();
+            initNavigation();
+            
+            // 页面加载动画
+            setTimeout(() => {
+                showHologramMessage('NEUROSCOPE AI SYSTEM ONLINE<br><br>Welcome to the future of decision-making.<br>Six specialized AI agents are ready to debate your strategic challenges.');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
